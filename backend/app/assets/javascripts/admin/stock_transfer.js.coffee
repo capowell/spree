@@ -30,7 +30,7 @@ $ ->
 
       $('#transfer_receive_stock').change (event) => @receive_stock_change(event)
 
-      $.getJSON Spree.url(Spree.routes.stock_locations_api), (data) =>
+      $.getJSON Spree.url(Spree.routes.stock_locations_api) + '?token=' + Spree.api_key, (data) =>
         @locations = (location for location in data.stock_locations)
         @force_receive_stock() if @locations.length < 2
 
@@ -96,7 +96,7 @@ $ ->
 
     _refresh_transfer_stock_items: ->
       stock_location_id = $('#transfer_source_location_id').val()
-      $.getJSON Spree.url(Spree.routes.stock_locations_api + "/#{stock_location_id}/stock_items"), (data) =>
+      $.getJSON Spree.url(Spree.routes.stock_locations_api + "/#{stock_location_id}/stock_items") + '?token=' + Spree.api_key, (data) =>
         @populate_select _.map(data.stock_items, (stock_item) -> new TransferStockItem(stock_item))
 
     populate_select: (variants) ->
@@ -107,7 +107,6 @@ $ ->
                                     .text(variant.name)
                                     .attr('value', variant.id)
                                     .data('variant', variant))
-
       $('#transfer_variant').select2()
 
   # Add/Remove variant line items
